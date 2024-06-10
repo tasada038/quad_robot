@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<robot name="quad_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find quad_robot_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find quad_robot_description)/urdf/quad_robot.trans" />
+<xacro:include filename="$(find quad_robot_description)/urdf/quad_robot.gazebo" />
+<xacro:include filename="$(find quad_robot_description)/urdf/quad_robot_description.xacro" />
+<xacro:quad_robot_description main_color="grey" sub_color="white" />
+
+<!-- Import MantaRobot ros2_control description -->
+<!-- <xacro:include filename="$(find quad_robot_description)/ros2_control/quad_robot_ros2_control.xacro" /> -->
+<!-- TODO effort controller なら滑らずにモデルを使用できる -->
+<xacro:include filename="$(find quad_robot_description)/ros2_control/quad_robot_ros2_effort_control.xacro" />
+<xacro:quad_robot_ros2_control name="quad_robot" />
+
+</robot>

@@ -1,0 +1,9 @@
+<launch>
+
+<rosparam file="$(find quad_robot_description)/launch/controller.yaml" command="load"/>
+<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="quad_robot" args="rf_hip_joint_position_controller rh_hip_joint_position_controller lf_hip_joint_position_controller lh_hip_joint_position_controller rf_upper_leg_joint_position_controller rh_upper_leg_joint_position_controller lf_upper_leg_joint_position_controller lh_upper_leg_joint_position_controller rf_lower_leg_joint_position_controller rh_lower_leg_joint_position_controller lf_lower_leg_joint_position_controller lh_lower_leg_joint_position_controller joint_state_controller "/>
+<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+  <remap from="/joint_states" to="/quad_robot/joint_states"/>
+</node>
+
+</launch>

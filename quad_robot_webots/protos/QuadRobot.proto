@@ -1,0 +1,621 @@
+#VRML_SIM R2023b utf8
+# license: Apache License 2.0
+# license url: http://www.apache.org/licenses/LICENSE-2.0
+# This is a proto file for Webots for the QuadRobot
+# Extracted from: /home/ubuntu/champ_ws/src/quad_robot/quad_robot_description/urdf/quad_robot.urdf
+
+PROTO QuadRobot [
+  field  SFVec3f     translation     0 0 0
+  field  SFRotation  rotation        0 0 1 0
+  field  SFString    name            "QuadRobot"  # Is `Robot.name`.
+  field  SFString    controller      "<extern>"   # Is `Robot.controller`.
+  field  MFString    controllerArgs  []           # Is `Robot.controllerArgs`.
+  field  SFString    customData      ""           # Is `Robot.customData`.
+  field  SFBool      supervisor      FALSE        # Is `Robot.supervisor`.
+  field  SFBool      synchronization TRUE         # Is `Robot.synchronization`.
+  field  SFBool      selfCollision   FALSE        # Is `Robot.selfCollision`.
+  field  MFNode      toolSlot        []           # Extend the robot with new nodes at the end of the arm.
+  field SFString     window          "<generic>"
+]
+{
+  Robot {
+    translation IS translation
+    rotation IS rotation
+    controller IS controller
+    controllerArgs IS controllerArgs
+    customData IS customData
+    supervisor IS supervisor
+    synchronization IS synchronization
+    selfCollision IS selfCollision
+    window IS window
+    children [
+      Transform {
+        scale 0.001000 0.001000 0.001000
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0.500000 0.500000 0.500000
+              roughness 1.000000
+              metalness 0
+            }
+            geometry DEF base_link Mesh {
+              url "../../quad_robot_description/meshes/base_link.stl"
+            }
+          }
+        ]
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis -1.000000 -0.000000 0.000000
+          anchor 0.050000 -0.060000 0.000000
+          staticFriction 10.0
+        }
+        device [
+          RotationalMotor {
+            name "rf_hip_joint"
+            maxVelocity 10.0
+            minPosition -1.570796
+            maxPosition 1.570796
+            maxTorque 100.0
+          }
+          PositionSensor {
+            name "rf_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation 0.050000 -0.060000 0.000000
+          children [
+            Transform {
+              translation -0.050000 0.060000 -0.000000
+              scale 0.001000 0.001000 0.001000
+              children [
+                Shape {
+                  appearance DEF grey PBRAppearance {
+                    baseColor 0.500000 0.500000 0.500000
+                    roughness 1.000000
+                    metalness 0
+                  }
+                  geometry DEF rf_hip_link Mesh {
+                    url "../..//quad_robot_description/meshes/rf_hip_link.stl"
+                  }
+                }
+              ]
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 -0.000000
+                anchor 0.040000 -0.039000 0.000000
+                staticFriction 10.0
+              }
+              device [
+                RotationalMotor {
+                  name "rf_upper_leg_joint"
+                  maxVelocity 10.0
+                  minPosition -1.047198
+                  maxPosition 1.047198
+                  maxTorque 100.0
+                }
+                PositionSensor {
+                  name "rf_upper_leg_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation 0.040000 -0.039000 0.000000
+                children [
+                  Transform {
+                    translation -0.090000 0.099000 -0.000000
+                    scale 0.001000 0.001000 0.001000
+                    children [
+                      Shape {
+                        appearance USE grey
+                        geometry DEF rf_upper_leg_link Mesh {
+                          url "../..//quad_robot_description/meshes/rf_upper_leg_link.stl"
+                        }
+                      }
+                    ]
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis -0.000000 1.000000 -0.000000
+                      anchor 0.000000 -0.006000 -0.100000
+                      staticFriction 10.0
+                    }
+                    device [
+                      RotationalMotor {
+                        name "rf_lower_leg_joint"
+                        maxVelocity 10.0
+                        minPosition -1.047198
+                        maxPosition 1.047198
+                        maxTorque 100.0
+                      }
+                      PositionSensor {
+                        name "rf_lower_leg_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 -0.006000 -0.100000
+                      children [
+                        Transform {
+                          translation -0.090000 0.105000 0.100000
+                          scale 0.001000 0.001000 0.001000
+                          children [
+                            Shape {
+                              appearance USE grey
+                              geometry DEF rf_lower_leg_link Mesh {
+                                url "../..//quad_robot_description/meshes/rf_lower_leg_link.stl"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                      name "rf_lower_leg_link"
+                      physics Physics {
+                        density -1
+                        mass 0.094129
+                        centerOfMass [ 0.000000 -0.010000 -0.042554 ]
+                        inertiaMatrix [
+                          1.400000e-04 1.490000e-04 1.500000e-05
+                          0.000000e+00 -0.000000e+00 0.000000e+00
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "rf_upper_leg_link"
+                physics Physics {
+                  density -1
+                  mass 0.160806
+                  centerOfMass [ -0.000000 -0.016000 -0.038046 ]
+                  inertiaMatrix [
+                    2.060000e-04 2.260000e-04 4.800000e-05
+                    -0.000000e+00 0.000000e+00 0.000000e+00
+                  ]
+                }
+              }
+            }
+          ]
+          name "rf_hip_link"
+          physics Physics {
+            density -1
+            mass 0.418842
+            centerOfMass [ 0.040000 -0.003388 0.000000 ]
+            inertiaMatrix [
+              3.980000e-04 4.270000e-04 4.160000e-04
+              0.000000e+00 -0.000000e+00 -0.000000e+00
+            ]
+          }
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis -1.000000 0.000000 0.000000
+          anchor -0.050000 -0.060000 0.000000
+          staticFriction 10.0
+        }
+        device [
+          RotationalMotor {
+            name "rh_hip_joint"
+            maxVelocity 10.0
+            minPosition -1.570796
+            maxPosition 1.570796
+            maxTorque 100.0
+          }
+          PositionSensor {
+            name "rh_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation -0.050000 -0.060000 0.000000
+          children [
+            Transform {
+              translation 0.050000 0.060000 -0.000000
+              scale 0.001000 0.001000 0.001000
+              children [
+                Shape {
+                  appearance USE grey
+                  geometry DEF rh_hip_link Mesh {
+                    url "../..//quad_robot_description/meshes/rh_hip_link.stl"
+                  }
+                }
+              ]
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 0.000000
+                anchor -0.040000 -0.039000 -0.000000
+                staticFriction 10.0
+              }
+              device [
+                RotationalMotor {
+                  name "rh_upper_leg_joint"
+                  maxVelocity 10.0
+                  minPosition -1.047198
+                  maxPosition 1.047198
+                  maxTorque 100.0
+                }
+                PositionSensor {
+                  name "rh_upper_leg_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation -0.040000 -0.039000 -0.000000
+                children [
+                  Transform {
+                    translation 0.090000 0.099000 0.000000
+                    scale 0.001000 0.001000 0.001000
+                    children [
+                      Shape {
+                        appearance USE grey
+                        geometry DEF rh_upper_leg_link Mesh {
+                          url "../..//quad_robot_description/meshes/rh_upper_leg_link.stl"
+                        }
+                      }
+                    ]
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis -0.000000 1.000000 0.000000
+                      anchor 0.000000 -0.006000 -0.100000
+                      staticFriction 10.0
+                    }
+                    device [
+                      RotationalMotor {
+                        name "rh_lower_leg_joint"
+                        maxVelocity 10.0
+                        minPosition -1.047198
+                        maxPosition 1.047198
+                        maxTorque 100.0
+                      }
+                      PositionSensor {
+                        name "rh_lower_leg_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 -0.006000 -0.100000
+                      children [
+                        Transform {
+                          translation 0.090000 0.105000 0.100000
+                          scale 0.001000 0.001000 0.001000
+                          children [
+                            Shape {
+                              appearance USE grey
+                              geometry DEF rh_lower_leg_link Mesh {
+                                url "../..//quad_robot_description/meshes/rh_lower_leg_link.stl"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                      name "rh_lower_leg_link"
+                      physics Physics {
+                        density -1
+                        mass 0.094129
+                        centerOfMass [ 0.000000 -0.010000 -0.042554 ]
+                        inertiaMatrix [
+                          1.400000e-04 1.490000e-04 1.500000e-05
+                          0.000000e+00 -0.000000e+00 0.000000e+00
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "rh_upper_leg_link"
+                physics Physics {
+                  density -1
+                  mass 0.160806
+                  centerOfMass [ -0.000000 -0.016000 -0.038046 ]
+                  inertiaMatrix [
+                    2.060000e-04 2.260000e-04 4.800000e-05
+                    -0.000000e+00 0.000000e+00 0.000000e+00
+                  ]
+                }
+              }
+            }
+          ]
+          name "rh_hip_link"
+          physics Physics {
+            density -1
+            mass 0.418842
+            centerOfMass [ -0.040000 -0.003388 -0.000000 ]
+            inertiaMatrix [
+              3.980000e-04 4.270000e-04 4.160000e-04
+              0.000000e+00 0.000000e+00 0.000000e+00
+            ]
+          }
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis -1.000000 0.000000 0.000000
+          anchor 0.050000 0.060000 0.000000
+          staticFriction 10.0
+        }
+        device [
+          RotationalMotor {
+            name "lf_hip_joint"
+            maxVelocity 10.0
+            minPosition -1.570796
+            maxPosition 1.570796
+            maxTorque 100.0
+          }
+          PositionSensor {
+            name "lf_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation 0.050000 0.060000 0.000000
+          children [
+            Transform {
+              translation -0.050000 -0.060000 -0.000000
+              scale 0.001000 0.001000 0.001000
+              children [
+                Shape {
+                  appearance USE grey
+                  geometry DEF lf_hip_link Mesh {
+                    url "../..//quad_robot_description/meshes/lf_hip_link.stl"
+                  }
+                }
+              ]
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 -0.000000
+                anchor 0.040000 0.039000 -0.000000
+                staticFriction 10.0
+              }
+              device [
+                RotationalMotor {
+                  name "lf_upper_leg_joint"
+                  maxVelocity 10.0
+                  minPosition -1.047198
+                  maxPosition 1.047198
+                  maxTorque 100.0
+                }
+                PositionSensor {
+                  name "lf_upper_leg_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation 0.040000 0.039000 -0.000000
+                children [
+                  Transform {
+                    translation -0.090000 -0.099000 0.000000
+                    scale 0.001000 0.001000 0.001000
+                    children [
+                      Shape {
+                        appearance USE grey
+                        geometry DEF lf_upper_leg_link Mesh {
+                          url "../..//quad_robot_description/meshes/lf_upper_leg_link.stl"
+                        }
+                      }
+                    ]
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis 0.000000 1.000000 -0.000000
+                      anchor 0.000000 0.006000 -0.100000
+                      staticFriction 10.0
+                    }
+                    device [
+                      RotationalMotor {
+                        name "lf_lower_leg_joint"
+                        maxVelocity 10.0
+                        minPosition -1.047198
+                        maxPosition 1.047198
+                        maxTorque 100.0
+                      }
+                      PositionSensor {
+                        name "lf_lower_leg_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 0.006000 -0.100000
+                      children [
+                        Transform {
+                          translation -0.090000 -0.105000 0.100000
+                          scale 0.001000 0.001000 0.001000
+                          children [
+                            Shape {
+                              appearance USE grey
+                              geometry DEF lf_lower_leg_link Mesh {
+                                url "../..//quad_robot_description/meshes/lf_lower_leg_link.stl"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                      name "lf_lower_leg_link"
+                      physics Physics {
+                        density -1
+                        mass 0.094129
+                        centerOfMass [ 0.000000 0.010000 -0.042554 ]
+                        inertiaMatrix [
+                          1.400000e-04 1.490000e-04 1.500000e-05
+                          0.000000e+00 -0.000000e+00 0.000000e+00
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "lf_upper_leg_link"
+                physics Physics {
+                  density -1
+                  mass 0.160806
+                  centerOfMass [ -0.000000 0.016000 -0.038046 ]
+                  inertiaMatrix [
+                    2.060000e-04 2.260000e-04 4.800000e-05
+                    0.000000e+00 0.000000e+00 0.000000e+00
+                  ]
+                }
+              }
+            }
+          ]
+          name "lf_hip_link"
+          physics Physics {
+            density -1
+            mass 0.418842
+            centerOfMass [ 0.040000 0.003388 0.000000 ]
+            inertiaMatrix [
+              3.980000e-04 4.270000e-04 4.160000e-04
+              0.000000e+00 0.000000e+00 -0.000000e+00
+            ]
+          }
+        }
+      }
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis -1.000000 0.000000 0.000000
+          anchor -0.050000 0.060000 0.000000
+          staticFriction 10.0
+        }
+        device [
+          RotationalMotor {
+            name "lh_hip_joint"
+            maxVelocity 10.0
+            minPosition -1.570796
+            maxPosition 1.570796
+            maxTorque 100.0
+          }
+          PositionSensor {
+            name "lh_hip_joint_sensor"
+          }
+        ]
+        endPoint Solid {
+          translation -0.050000 0.060000 0.000000
+          children [
+            Transform {
+              translation 0.050000 -0.060000 -0.000000
+              scale 0.001000 0.001000 0.001000
+              children [
+                Shape {
+                  appearance USE grey
+                  geometry DEF lh_hip_link Mesh {
+                    url "../..//quad_robot_description/meshes/lh_hip_link.stl"
+                  }
+                }
+              ]
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0.000000 1.000000 0.000000
+                anchor -0.040000 0.039000 0.000000
+                staticFriction 10.0
+              }
+              device [
+                RotationalMotor {
+                  name "lh_upper_leg_joint"
+                  maxVelocity 10.0
+                  minPosition -1.047198
+                  maxPosition 1.047198
+                  maxTorque 100.0
+                }
+                PositionSensor {
+                  name "lh_upper_leg_joint_sensor"
+                }
+              ]
+              endPoint Solid {
+                translation -0.040000 0.039000 0.000000
+                children [
+                  Transform {
+                    translation 0.090000 -0.099000 -0.000000
+                    scale 0.001000 0.001000 0.001000
+                    children [
+                      Shape {
+                        appearance USE grey
+                        geometry DEF lh_upper_leg_link Mesh {
+                          url "../..//quad_robot_description/meshes/lh_upper_leg_link.stl"
+                        }
+                      }
+                    ]
+                  }
+                  HingeJoint {
+                    jointParameters HingeJointParameters {
+                      axis -0.000000 1.000000 0.000000
+                      anchor 0.000000 0.006000 -0.100000
+                      staticFriction 10.0
+                    }
+                    device [
+                      RotationalMotor {
+                        name "lh_lower_leg_joint"
+                        maxVelocity 10.0
+                        minPosition -1.047198
+                        maxPosition 1.047198
+                        maxTorque 100.0
+                      }
+                      PositionSensor {
+                        name "lh_lower_leg_joint_sensor"
+                      }
+                    ]
+                    endPoint Solid {
+                      translation 0.000000 0.006000 -0.100000
+                      children [
+                        Transform {
+                          translation 0.090000 -0.105000 0.100000
+                          scale 0.001000 0.001000 0.001000
+                          children [
+                            Shape {
+                              appearance USE grey
+                              geometry DEF lh_lower_leg_link Mesh {
+                                url "../..//quad_robot_description/meshes/lh_lower_leg_link.stl"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                      name "lh_lower_leg_link"
+                      physics Physics {
+                        density -1
+                        mass 0.094129
+                        centerOfMass [ 0.000000 0.010000 -0.042554 ]
+                        inertiaMatrix [
+                          1.400000e-04 1.490000e-04 1.500000e-05
+                          0.000000e+00 -0.000000e+00 0.000000e+00
+                        ]
+                      }
+                    }
+                  }
+                ]
+                name "lh_upper_leg_link"
+                physics Physics {
+                  density -1
+                  mass 0.160806
+                  centerOfMass [ -0.000000 0.016000 -0.038046 ]
+                  inertiaMatrix [
+                    2.060000e-04 2.260000e-04 4.800000e-05
+                    -0.000000e+00 0.000000e+00 0.000000e+00
+                  ]
+                }
+              }
+            }
+          ]
+          name "lh_hip_link"
+          physics Physics {
+            density -1
+            mass 0.418842
+            centerOfMass [ -0.040000 0.003388 0.000000 ]
+            inertiaMatrix [
+              3.980000e-04 4.270000e-04 4.160000e-04
+              0.000000e+00 0.000000e+00 -0.000000e+00
+            ]
+          }
+        }
+      }
+      Group {
+        children IS toolSlot
+      }
+    ]
+    name IS name
+    boundingObject Box {
+      size 0.35 0.15 0.08
+    }
+    physics Physics {
+      density -1
+      mass 3.949378
+      centerOfMass [ 0.000000 0.000000 0.000000 ]
+      inertiaMatrix [
+        1.321200e-02 5.520200e-02 6.397600e-02
+        0.000000e+00 7.850000e-04 0.000000e+00
+      ]
+    }
+  }
+}

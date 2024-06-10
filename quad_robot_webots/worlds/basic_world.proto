@@ -1,0 +1,133 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+# Advertising Board PROTO
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/advertising_board/protos/AdvertisingBoard.proto"
+
+# Buildings PROTO
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/buildings/protos/CyberboticsTower.proto"
+
+# Floors PROTO
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/CircleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/UnevenTerrain.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+
+# Drinks PROTO
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/drinks/protos/Can.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/drinks/protos/WaterBottle.proto"
+
+# Human PROTO
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/humans/pedestrian/protos/Pedestrian.proto"
+
+# Robots PROTO
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/nex/protos/FireBird6.proto"
+
+# local PROTO (absolute path)
+EXTERNPROTO "/home/ubuntu/champ_ws/src/quad_robot/quad_robot_webots/protos/QuadRobot.proto"
+
+WorldInfo {
+  info [
+    "Original Robot simulation that can be controlled by a ROS."
+  ]
+  title "ROS2 simulation of the quad_robot robot"
+  basicTimeStep 20
+}
+Viewpoint {
+  orientation -0.33185733874619844 -0.09874274160469809 0.9381474178937331 3.686018050088086
+  position 1.700313773507203 1.0549607538959629 1.4846240848267684
+  follow "QuadRobot"
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+
+RectangleArena {
+  translation     0 0 0
+  rotation        0 1 0 0
+  name            "rectangle arena"
+  floorSize       25 25
+  floorTileSize   1 1
+  wallThickness   0.01
+  wallHeight      0.5
+  wallColor       0.8 0.8 0.8
+  wallTileSize    0.5 0.5
+}
+
+AdvertisingBoard {
+  translation       -3 0 0
+  rotation          0 0 1 0
+  name              "advertising board"
+  recognitionColors [ 1 1 1, 0.75 0 0 ]
+  displayBackLight  FALSE
+  displayWidth      2
+  displayHeight     1.5
+  frameThickness    0.6
+  frameColor        0.886275 0.886275 0.886275
+  poleColor         0.886275 0.886275 0.886275
+  poleNumber        0
+  poleType          "cylinder"
+  poleHeight        5
+  poleThickness     0.4
+  baseRatio         3.2
+}
+
+Can {
+  translation -1.2 0.5 0.06
+  rotation 0 0 1 0
+  name "can_1"
+  color 1 1 1
+  mass 0.35
+}
+
+WaterBottle {
+  translation -1.3 0.6 0
+  rotation    0 0 1 0
+  name        "water bottle"
+  mass        1
+}
+
+Pedestrian {
+  translation -7.2 -1.2 1.28
+  name "Pedestrian1"
+  controllerArgs [
+    "--trajectory=-7.2 -1.2, -7.2 3.8"
+    "--speed=0.5"
+  ]
+  shirtColor            0.25 0.55 0.20
+  pantsColor            0.24 0.25 0.5
+  shoesColor            0.28 0.15 0.06
+  skinColor             1.0 0.75 0.7
+  enableBoundingObject TRUE
+}
+
+Pedestrian {
+  translation 0 -2.5 1.28
+  name "Pedestrian2"
+  controllerArgs [
+    "--trajectory=0 -2.5, -3.0 -2.5"
+    "--speed=0.8"
+  ]
+  shirtColor            0.33 0.30 0.40
+  pantsColor            0.24 0.25 0.5
+  shoesColor            0.28 0.15 0.06
+  skinColor             1.0 0.75 0.7
+  enableBoundingObject TRUE
+}
+
+DEF MyRobot QuadRobot {
+  translation     0 0 0.4
+  rotation        0 0 1 0
+  name            "quad_robot"  # Is `Robot.name`.
+  controller      "<extern>"   # Is `Robot.controller`. ex: "<generic>", "<extern>"
+  controllerArgs  []           # Is `Robot.controllerArgs`.
+  customData      ""           # Is `Robot.customData`.
+  supervisor      TRUE        # Is `Robot.supervisor`.
+  synchronization TRUE         # Is `Robot.synchronization`.
+  selfCollision   FALSE        # Is `Robot.selfCollision`.
+  toolSlot        []           # Extend the robot with new nodes at the end of the arm.
+  window          "<generic>"
+}

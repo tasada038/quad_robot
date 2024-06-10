@@ -1,0 +1,463 @@
+<?xml version="1.0" ?>
+<robot name="quad_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- TODO add joint tag to <dynamics damping="0.0" friction="10.0"/> -->
+<!-- TODO inertiaのoriginとか触ると、場所変わるのでNG -->
+
+<xacro:include filename="$(find champ_description)/urdf/properties.urdf.xacro" />
+
+
+<xacro:macro name="quad_robot_description" params="main_color sub_color">
+<xacro:property name="lower_leg_to_foot_distance" value="0.11" />
+
+  <!-- TODO add imu_link -->
+  <link name="imu_link">
+    <inertial>
+      <mass value="0.001"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1e-09" ixy="0.0" ixz="0.0" iyy="1e-09" iyz="0.0" izz="1e-09"/>
+    </inertial>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+  </joint>
+
+  <!-- <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="3.949377918410707"/>
+      <inertia ixx="0.013212" iyy="0.055202" izz="0.063976" ixy="0.0" iyz="0.0" ixz="0.000785"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find quad_robot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="${main_color}"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find quad_robot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link> -->
+
+  <!-- TODO delete base_link inertial tag -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find quad_robot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="${main_color}"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find quad_robot_description)/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- TODO divide base_link into inertia link -->
+  <link name="base_inertia">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="3.949377918410707"/>
+      <inertia ixx="0.013212" iyy="0.055202" izz="0.063976" ixy="0.0" iyz="0.0" ixz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="base_link_to_base_inertia" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_inertia"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+  <!-- TODO add foot link -->
+  <link name="rf_foot_link" />
+  <joint name="rf_foot_joint" type="fixed">
+    <parent link="rf_lower_leg_link" />
+    <child link="rf_foot_link" />
+    <origin xyz="0 0 -${lower_leg_to_foot_distance}" rpy="0 0 0" />
+  </joint>
+  <link name="rh_foot_link" />
+  <joint name="rh_foot_joint" type="fixed">
+    <parent link="rh_lower_leg_link" />
+    <child link="rh_foot_link" />
+    <origin xyz="0 0 -${lower_leg_to_foot_distance}" rpy="0 0 0" />
+  </joint>
+  <link name="lf_foot_link" />
+  <joint name="lf_foot_joint" type="fixed">
+    <parent link="lf_lower_leg_link" />
+    <child link="lf_foot_link" />
+    <origin xyz="0 0 -${lower_leg_to_foot_distance}" rpy="0 0 0" />
+  </joint>
+  <link name="lh_foot_link" />
+  <joint name="lh_foot_joint" type="fixed">
+    <parent link="lh_lower_leg_link" />
+    <child link="lh_foot_link" />
+    <origin xyz="0 0 -${lower_leg_to_foot_distance}" rpy="0 0 0" />
+  </joint>
+
+<link name="rf_hip_link">
+  <inertial>
+    <origin xyz="0.04000000000000005 -0.0033883605352012514 1.815433672304822e-17" rpy="0 0 0"/>
+    <mass value="0.418842162082933"/>
+    <inertia ixx="0.000398" iyy="0.000427" izz="0.000416" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.05 0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rf_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.05 0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rf_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rh_hip_link">
+  <inertial>
+    <origin xyz="-0.039999999999999966 -0.0033883605352011126 -2.885909027996524e-18" rpy="0 0 0"/>
+    <mass value="0.418842162082933"/>
+    <inertia ixx="0.000398" iyy="0.000427" izz="0.000416" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.05 0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rh_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="0.05 0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rh_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lf_hip_link">
+  <inertial>
+    <origin xyz="0.04000000000012972 0.0033883605352012652 8.881784197001253e-18" rpy="0 0 0"/>
+    <mass value="0.41884216208293407"/>
+    <inertia ixx="0.000398" iyy="0.000427" izz="0.000416" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.05 -0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lf_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.05 -0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lf_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lh_hip_link">
+  <inertial>
+    <origin xyz="-0.04000000000000006 0.003388360535201196 9.766968170619275e-18" rpy="0 0 0"/>
+    <mass value="0.418842162082933"/>
+    <inertia ixx="0.000398" iyy="0.000427" izz="0.000416" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.05 -0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lh_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="0.05 -0.06 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lh_hip_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rf_upper_leg_link">
+  <inertial>
+    <origin xyz="-8.652800698172314e-14 -0.01599999999999989 -0.038046278936919406" rpy="0 0 0"/>
+    <mass value="0.16080574980884343"/>
+    <inertia ixx="0.000206" iyy="0.000226" izz="4.8e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.09 0.099 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rf_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.09 0.099 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rf_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rh_upper_leg_link">
+  <inertial>
+    <origin xyz="-8.662515149637784e-14 -0.015999999999999626 -0.03804627893691973" rpy="0 0 0"/>
+    <mass value="0.16080574980884343"/>
+    <inertia ixx="0.000206" iyy="0.000226" izz="4.8e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.09 0.099 0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rh_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="0.09 0.099 0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rh_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lf_upper_leg_link">
+  <inertial>
+    <origin xyz="-8.66806626476091e-14 0.016000000000000167 -0.03804627893691959" rpy="0 0 0"/>
+    <mass value="0.16080574980884343"/>
+    <inertia ixx="0.000206" iyy="0.000226" izz="4.8e-05" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.09 -0.099 0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lf_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.09 -0.099 0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lf_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lh_upper_leg_link">
+  <inertial>
+    <origin xyz="-8.67778071622638e-14 0.015999999999999848 -0.038046278936919455" rpy="0 0 0"/>
+    <mass value="0.16080574980884343"/>
+    <inertia ixx="0.000206" iyy="0.000226" izz="4.8e-05" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.09 -0.099 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lh_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="0.09 -0.099 -0.0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lh_upper_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rf_lower_leg_link">
+  <inertial>
+    <origin xyz="1.16579398690142e-07 -0.010000000167776815 -0.04255385923514293" rpy="0 0 0"/>
+    <mass value="0.09412944960610932"/>
+    <inertia ixx="0.00014" iyy="0.000149" izz="1.5e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.09 0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rf_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.09 0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rf_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="rh_lower_leg_link">
+  <inertial>
+    <origin xyz="1.1657939859299749e-07 -0.01000000016777669 -0.042553859235143515" rpy="0 0 0"/>
+    <mass value="0.09412944960610932"/>
+    <inertia ixx="0.00014" iyy="0.000149" izz="1.5e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.09 0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rh_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="0.09 0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/rh_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lf_lower_leg_link">
+  <inertial>
+    <origin xyz="1.1657939852360855e-07 0.009999999832223147 -0.04255385923514313" rpy="0 0 0"/>
+    <mass value="0.09412944960610932"/>
+    <inertia ixx="0.00014" iyy="0.000149" izz="1.5e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.09 -0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lf_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.09 -0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lf_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="lh_lower_leg_link">
+  <inertial>
+    <origin xyz="1.1657939841258624e-07 0.009999999832222856 -0.04255385923514293" rpy="0 0 0"/>
+    <mass value="0.09412944960610932"/>
+    <inertia ixx="0.00014" iyy="0.000149" izz="1.5e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.09 -0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lh_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="${main_color}"/>
+  </visual>
+  <collision>
+    <origin xyz="0.09 -0.105 0.1" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="file://$(find quad_robot_description)/meshes/lh_lower_leg_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="rf_hip_joint" type="revolute">
+  <origin xyz="0.05 -0.06 0.0" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="rf_hip_link"/>
+  <axis xyz="-1.0 -0.0 0.0"/>
+  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="rh_hip_joint" type="revolute">
+  <origin xyz="-0.05 -0.06 0.0" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="rh_hip_link"/>
+  <axis xyz="-1.0 0.0 0.0"/>
+  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="lf_hip_joint" type="revolute">
+  <origin xyz="0.05 0.06 0.0" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="lf_hip_link"/>
+  <axis xyz="-1.0 0.0 0.0"/>
+  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="lh_hip_joint" type="revolute">
+  <origin xyz="-0.05 0.06 0.0" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="lh_hip_link"/>
+  <axis xyz="-1.0 0.0 0.0"/>
+  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="rf_upper_leg_joint" type="revolute">
+  <origin xyz="0.04 -0.039 0.0" rpy="0 0 0"/>
+  <parent link="rf_hip_link"/>
+  <child link="rf_upper_leg_link"/>
+  <axis xyz="0.0 1.0 -0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="rh_upper_leg_joint" type="revolute">
+  <origin xyz="-0.04 -0.039 -0.0" rpy="0 0 0"/>
+  <parent link="rh_hip_link"/>
+  <child link="rh_upper_leg_link"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="lf_upper_leg_joint" type="revolute">
+  <origin xyz="0.04 0.039 -0.0" rpy="0 0 0"/>
+  <parent link="lf_hip_link"/>
+  <child link="lf_upper_leg_link"/>
+  <axis xyz="0.0 1.0 -0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="lh_upper_leg_joint" type="revolute">
+  <origin xyz="-0.04 0.039 0.0" rpy="0 0 0"/>
+  <parent link="lh_hip_link"/>
+  <child link="lh_upper_leg_link"/>
+  <axis xyz="0.0 1.0 0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="rf_lower_leg_joint" type="revolute">
+  <origin xyz="0.0 -0.006 -0.1" rpy="0 0 0"/>
+  <parent link="rf_upper_leg_link"/>
+  <child link="rf_lower_leg_link"/>
+  <axis xyz="-0.0 1.0 -0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="rh_lower_leg_joint" type="revolute">
+  <origin xyz="0.0 -0.006 -0.1" rpy="0 0 0"/>
+  <parent link="rh_upper_leg_link"/>
+  <child link="rh_lower_leg_link"/>
+  <axis xyz="-0.0 1.0 0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="lf_lower_leg_joint" type="revolute">
+  <origin xyz="0.0 0.006 -0.1" rpy="0 0 0"/>
+  <parent link="lf_upper_leg_link"/>
+  <child link="lf_lower_leg_link"/>
+  <axis xyz="0.0 1.0 -0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+
+<joint name="lh_lower_leg_joint" type="revolute">
+  <origin xyz="0.0 0.006 -0.1" rpy="0 0 0"/>
+  <parent link="lh_upper_leg_link"/>
+  <child link="lh_lower_leg_link"/>
+  <axis xyz="-0.0 1.0 0.0"/>
+  <limit upper="1.047198" lower="-1.047198" effort="100" velocity="10"/>
+  <dynamics damping="0.0" friction="10.0"/>
+</joint>
+</xacro:macro>
+</robot>

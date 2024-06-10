@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<robot name="QuadRobot">
+    <webots>
+        <device reference="ds_left" type="DistanceSensor">
+            <ros>
+                <topicName>/left_sensor</topicName>
+                <alwaysOn>true</alwaysOn>
+            </ros>
+        </device>
+        <device reference="ds_right" type="DistanceSensor">
+            <ros>
+                <topicName>/right_sensor</topicName>
+                <alwaysOn>true</alwaysOn>
+            </ros>
+        </device>
+        <!-- <plugin type="webots_ros2_control::Ros2Control" /> -->
+        <!-- load xml file -->
+        <plugin type="quad_robot_driver::QuadRobotDriver" />
+    </webots>
+
+    <!-- <ros2_control name="WebotsControl" type="system">
+        <hardware>
+            <plugin>webots_ros2_control::Ros2ControlSystem</plugin>
+        </hardware>
+        <joint name="rev_left_fin">
+            <state_interface name="position"/>
+            <command_interface name="velocity"/>
+        </joint>
+        <joint name="rev_right_fin">
+            <state_interface name="position"/>
+            <command_interface name="velocity"/>
+        </joint>
+    </ros2_control> -->
+
+</robot>
+
+
+
